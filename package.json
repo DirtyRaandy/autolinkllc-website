@@ -1,0 +1,10 @@
+{
+  "name": "autolinkllc-website",
+  "private": true,
+  "scripts": {
+    "deploy": "powershell -ExecutionPolicy Bypass -File ./scripts/deploy.ps1"
+  },
+  "devDependencies": {
+    "netlify-cli": "^23.0.0"
+  }
+}

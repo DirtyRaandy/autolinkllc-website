@@ -1,0 +1,18 @@
+---
+description: Deploy website changes to Netlify after updates
+alwaysApply: true
+---
+
+# Auto-link website deploy
+
+After changing inventory (`js/cars-data.js`), site pages, or styles, deploy when the user wants updates live:
+
+```powershell
+npm run deploy -- "Short commit message describing the change"
+```
+
+Requirements (one-time, already set up in this project):
+- Git remote on GitHub (`origin`)
+- Either Netlify linked to that GitHub repo (auto-deploy on push), **or** a `.env` file with `NETLIFY_AUTH_TOKEN` and `NETLIFY_SITE_ID` for CLI deploys
+
+Never commit `.env`. Do not push unless the user asked for a live update or deploy setup.
