@@ -44,13 +44,19 @@ Write-Host "Pushed to GitHub ($branch)."
 
 Load-DotEnv
 
-if ($env:NETLIFY_AUTH_TOKEN -and $env:NETLIFY_SITE_ID) {
+$netlifyLinked = Test-Path ".netlify\state.json"
+$hasEnvCreds = $env:NETLIFY_AUTH_TOKEN -and $env:NETLIFY_SITE_ID
+
+if ($netlifyLinked -or $hasEnvCreds) {
     Write-Host "Deploying to Netlify..."
-    npx --yes netlify-cli deploy --prod --dir . --site $env:NETLIFY_SITE_ID
+    if ($hasEnvCreds) {
+        npx netlify deploy --prod --dir . --site $env:NETLIFY_SITE_ID
+    } else {
+        npx netlify deploy --prod --dir .
+    }
     Write-Host "Live on Netlify."
 } else {
     Write-Host ""
     Write-Host "GitHub push complete."
-    Write-Host "If Netlify is linked to this repo, the site will update automatically."
-    Write-Host "For direct CLI deploys, copy .env.example to .env and add NETLIFY_AUTH_TOKEN + NETLIFY_SITE_ID."
+    Write-Host "Run 'npx netlify link' in this folder, or add NETLIFY_AUTH_TOKEN + NETLIFY_SITE_ID to .env."
 }
