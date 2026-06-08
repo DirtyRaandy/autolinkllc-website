@@ -57,22 +57,10 @@ npm run deploy -- "Mark 2016 Equinox as sold"
 
 That commits any changes, pushes to GitHub, and deploys to Netlify (if credentials are configured).
 
-### One-time setup
+### Setup status
 
-**Option A — GitHub auto-deploy (recommended)**
+- **GitHub repo:** [DirtyRaandy/autolinkllc-website](https://github.com/DirtyRaandy/autolinkllc-website) (public, alongside `petirement`)
+- **Netlify site:** [autolinkllc.co](https://autolinkllc.co) — linked to this repo and folder
+- **Deploy flow:** `npm run deploy` → commit → push to GitHub → deploy to Netlify
 
-1. In [Netlify](https://app.netlify.com/), open your site (`autolinkllc-co`).
-2. Go to **Site configuration → Build & deploy → Continuous deployment**.
-3. Link the GitHub repo [DirtyRaandy/autolinkllc-website](https://github.com/DirtyRaandy/autolinkllc-website).
-4. Build command: leave empty. Publish directory: `.` (root).
-
-After that, every `npm run deploy` push updates the live site automatically.
-
-**Option B — Netlify CLI (no GitHub link needed)**
-
-1. Copy `.env.example` to `.env`.
-2. Create a [Netlify personal access token](https://app.netlify.com/user/applications#personal-access-tokens).
-3. Copy your **Site ID** from Netlify → Site configuration → Site details.
-4. Paste both values into `.env`.
-
-Future agent sessions can run `npm run deploy` after website changes.
+No extra setup needed. Future website changes can go live with one command.
