@@ -24,10 +24,15 @@ if (-not (Test-Path ".git")) {
     throw "Git is not initialized in this folder. Run setup first."
 }
 
+$gitIdentity = @(
+    "-c", "user.name=DirtyRaandy",
+    "-c", "user.email=DirtyRaandy@users.noreply.github.com"
+)
+
 $changes = git status --porcelain
 if ($changes) {
     git add -A
-    git commit -m $commitMessage
+    git @gitIdentity commit -m $commitMessage
     Write-Host "Committed: $commitMessage"
 } else {
     Write-Host "No local changes to commit."

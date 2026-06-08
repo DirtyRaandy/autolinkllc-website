@@ -63,7 +63,7 @@ That commits any changes, pushes to GitHub, and deploys to Netlify (if credentia
 
 1. In [Netlify](https://app.netlify.com/), open your site (`autolinkllc-co`).
 2. Go to **Site configuration → Build & deploy → Continuous deployment**.
-3. Link the GitHub repo `DirtyRaandy/autolinkllc-website`.
+3. Link the GitHub repo [DirtyRaandy/autolinkllc-website](https://github.com/DirtyRaandy/autolinkllc-website).
 4. Build command: leave empty. Publish directory: `.` (root).
 
 After that, every `npm run deploy` push updates the live site automatically.
