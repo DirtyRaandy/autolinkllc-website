@@ -11,7 +11,7 @@
  *    differs from the folder name's year, the VIN year wins.
  *  - `photos: []` triggers the "Photos coming soon" placeholder.
  *  - `noInfo: true` triggers the "Information coming soon" placeholder.
- *  - `sold: true` hides the vehicle from the public inventory grid.
+ *  - `sold: true` shows a SOLD badge on the card and sorts the vehicle to the end.
  *  - `description` is a short summary derived from the VIN (NHTSA vPIC decode).
  */
 

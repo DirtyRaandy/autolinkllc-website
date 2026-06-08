@@ -49,11 +49,10 @@
   }
 
   function getCars() {
-    const data = Array.isArray(window.CARS_DATA) ? window.CARS_DATA : [];
-    return data.filter((car) => !car.sold);
+    return Array.isArray(window.CARS_DATA) ? window.CARS_DATA.slice() : [];
   }
 
-  function sortCars(cars, mode) {
+  function sortCarsByMode(cars, mode) {
     const c = cars.slice();
     switch (mode) {
       case "year-asc":
@@ -73,6 +72,12 @@
       default:
         return c.sort((a, b) => b.year - a.year);
     }
+  }
+
+  function sortCars(cars, mode) {
+    const available = sortCarsByMode(cars.filter((car) => !car.sold), mode);
+    const sold = sortCarsByMode(cars.filter((car) => car.sold), mode);
+    return available.concat(sold);
   }
 
   function filterCars(cars, term) {
@@ -101,16 +106,20 @@
     const imgSrc = primaryImage(car);
     const photoCount = (car.photos && car.photos.length) || 0;
     const animDelay = (index * 0.08).toFixed(2);
-    const priceDisplay = formatPrice(car);
+    const priceDisplay = car.sold ? "Sold" : formatPrice(car);
+    const soldOverlay = car.sold
+      ? `<div class="car-card__sold-overlay" aria-hidden="true"><span class="car-card__sold-label">SOLD</span></div>`
+      : "";
 
     const imageMarkup = imgSrc
       ? `<img src="${escapeHtml(imgSrc)}" alt="${escapeHtml(title)}" loading="lazy">
+         ${soldOverlay}
          ${photoCount > 1 ? `<span class="car-card__photo-count">${photoCount} photos</span>` : ""}`
       : `<div class="car-card__no-photo">
            <svg xmlns="http://www.w3.org/2000/svg" width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><polyline points="21 15 16 10 5 21"></polyline></svg>
            <div class="car-card__no-photo-title">Photos coming soon</div>
            <div class="car-card__no-photo-text">Call or text us to schedule a viewing</div>
-         </div>`;
+         </div>${soldOverlay}`;
 
     const detailChips = [];
     if (car.mileage) {
@@ -124,15 +133,15 @@
     }
 
     return `
-    <article class="car-card" style="animation: fadeInUp 0.5s ease ${animDelay}s both;" data-car-id="${escapeHtml(car.id)}">
-      <span class="car-card__badge">Available</span>
+    <article class="car-card${car.sold ? " car-card--sold" : ""}" style="animation: fadeInUp 0.5s ease ${animDelay}s both;" data-car-id="${escapeHtml(car.id)}">
+      <span class="car-card__badge${car.sold ? " car-card__badge--sold" : ""}">${car.sold ? "Sold" : "Available"}</span>
       <div class="car-card__image" data-action="open-detail" data-car-id="${escapeHtml(car.id)}">
         ${imageMarkup}
       </div>
       <div class="car-card__content">
         <h3 class="car-card__title">${escapeHtml(title)}</h3>
         <div class="car-card__details">${detailChips.join("")}</div>
-        <div class="car-card__price">${escapeHtml(priceDisplay)}</div>
+        <div class="car-card__price${car.sold ? " car-card__price--sold" : ""}">${escapeHtml(priceDisplay)}</div>
         <div class="car-card__footer">
           <button type="button" class="car-card__button button" data-action="open-detail" data-car-id="${escapeHtml(car.id)}">View Details</button>
           <a href="tel:9376549550" class="car-card__button button button--outline" aria-label="Call or text Auto-link LLC">
@@ -160,10 +169,17 @@
     cars = sortCars(cars, mode);
 
     if (count) {
-      const total = getCars().length;
-      count.textContent = cars.length === total
-        ? `${total} ${total === 1 ? "vehicle" : "vehicles"} available`
-        : `Showing ${cars.length} of ${total} vehicles`;
+      const all = getCars();
+      const total = all.length;
+      const soldCount = all.filter((car) => car.sold).length;
+      const availableCount = total - soldCount;
+      if (cars.length !== total) {
+        count.textContent = `Showing ${cars.length} of ${total} vehicles`;
+      } else if (soldCount > 0) {
+        count.textContent = `${total} vehicles · ${availableCount} available · ${soldCount} sold`;
+      } else {
+        count.textContent = `${total} ${total === 1 ? "vehicle" : "vehicles"} available`;
+      }
     }
 
     if (cars.length === 0) {
