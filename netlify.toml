@@ -1,2 +1,5 @@
 [build]
   publish = "."
+
+[build.environment]
+  GOOGLE_ANALYTICS_ID = "G-ZL2CGZQZBD"
